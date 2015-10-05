@@ -5,65 +5,39 @@ var minutes = process.argv[3];
 transferTimeToRomanSystem(hours, minutes);
 
 function transferTimeToRomanSystem(hours, minutes) {
-	if (isNaN(hours) || isNaN(minutes)) {
-		process.stdout
-				.write('Время указано не верно.'
-						+ '\n'
-						+ 'Ошибка: Введеные параметры не являются числовыми значениями.'
-						+ '\n');
-		return false;
-	}
-	
-	if ((hours < 0) || (hours > 23) || (minutes < 0) || (minutes > 59)) {
-		process.stdout.write('Время указано не верно' + '\n');
-	}
-	else {
-		process.stdout.write((convertToRoman(hours) + ':'
-				+ convertToRoman(minutes) + '\n'));
-	}
+    hours = parseInt(hours, 10);
+    minutes = parseInt(minutes, 10);
+    if (isNaN(hours) || isNaN(minutes)) {
+        console.error('Время указано не верно.' + '\n'
+                + 'Ошибка: Введеные параметры не являются числовыми значениями.' + '\n');
+        return false;
+    }
+    
+    if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
+        console.error('Время указано не верно' + '\n');
+    }
+    else {
+        console.log((integerToRoman(hours) + ':' + integerToRoman(minutes) + '\n'));
+    }
 }
 
-function convertToRoman(value) {
-	var result = '', amountFifty = Math.floor(value / 50), amountTen = Math
-			.floor((value - amountFifty * 50) / 10), amountFive = Math
-			.floor((value - amountFifty * 50 - amountTen * 10) / 5), amountUnit = value
-			- amountFifty * 50 - amountTen * 10 - amountFive * 5;
-	
-	if ((amountFifty == 0) && (amountTen == 0) && (amountFive == 0)
-			&& (amountUnit == 0))
-	{
-		return '-';
-	}
-	
-	for (var i = 0; i < amountFifty; i++) {
-		result += 'L';
-	}
-	
-	if (amountTen == 4) {
-		result += 'XL';
-	}
-	else {
-		for (var i = 0; i < amountTen; i++) {
-			result += 'X';
-		}
-	}
-	
-	if ((amountFive == 1) && (amountUnit == 4)) {
-		result += 'IX';
-	}
-	else {
-		if (amountFive == 1) {
-			result += 'V';
-		}
-		
-		if (amountUnit == 4) {
-			result += 'IV';
-		}
-		else {
-			for (var i = 0; i < amountUnit; i++) {
-				result += 'I';
-			}
-		}
-	}
-	return result;
+function integerToRoman(n) {
+    if (n == 0) {
+        return '-';
+    }
+    var a = [
+            'I', 'IV', 'V', 'IX', 'X', 'XL', 'L'
+    ];
+    var b = [
+            1, 4, 5, 9, 10, 40, 50
+    ];
+    var s = "";
+    for (var i = a.length - 1; i >= 0; i--) {
+        while (n >= b[i]) {
+            s += a[i];
+            n -= b[i];
+        }
+        ;
+    }
+    return s;
 }
